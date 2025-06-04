@@ -143,7 +143,15 @@ body.dark-theme {
         font-size: 0.95rem;
     }
 }
-
+.ai-label {
+    background-color:black;
+    color: #08b2ce;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: bold;
+    display: inline-block;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
 
 /* LIGHT THEME */
 body.light-theme {
