@@ -1,8 +1,7 @@
-body, html {
-    height: 100%;
+body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background-color: rgb(0, 64, 64);
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .chat-container {
@@ -11,77 +10,84 @@ body, html {
     margin: auto;
     display: flex;
     flex-direction: column;
-    border: 1px solid #ccc;
-    background-color: #fff;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
 }
-.chat-header img {
-    border-radius: 50%;
+
+.chat-header {
+    background-color: var(--header-bg);
+    color: var(--header-text);
 }
+
 .chat-body {
     flex: 1;
     overflow-y: auto;
-    background-color: #f9f9f9;
+    background-color: var(--body-bg);
     padding: 20px;
 }
 
+.chat-footer {
+    background-color: var(--footer-bg);
+}
+
 .message {
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 10px;
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    border-radius: 20px;
     max-width: 80%;
     word-wrap: break-word;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
 }
 
 .user-message {
-    background-color: #d1e7dd;
+    background-color: var(--user-msg);
     align-self: flex-end;
-    text-align: right;
+    text-align: left;
 }
 
 .ai-message {
-    background-color: #e2e3e5;
+    background-color: var(--ai-msg);
     align-self: flex-start;
     text-align: left;
 }
 
-.loader-message {
-    background-color: #e2e3e5;
-    align-self: flex-start;
-    text-align: left;
-    font-style: italic;
-    opacity: 0.7;
-}
-
-
-
-/* Code editor formatting */
-pre.code-editor {
-    background-color: #2d2d2d;
-    color: #ccc;
-    padding: 15px;
-    border-radius: 8px;
-    overflow-x: auto;
-    font-size: 14px;
-    font-family: 'Fira Code', monospace;
-    margin: 12px 0;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.4);
-}
-
-/* Inline code */
-code.inline-code {
-    background-color: #eee;
-    border-radius: 4px;
-    padding: 2px 6px;
+pre, code {
     font-family: 'Fira Code', monospace;
     font-size: 14px;
 }
+#chatForm{
+	 height: 16%;
+	 
+	 padding: 1%;
+	 width: auto;
+}
+#chatInput{
+	
+}
 
-/* Required Prism.js default theme styling */
-code[class*="language-"], pre[class*="language-"] {
-    white-space: pre;
-    word-break: normal;
-    word-wrap: normal;
-    line-height: 1.5;
-    tab-size: 4;
-    hyphens: none;
+/* LIGHT THEME */
+body.light-theme {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --header-bg: #0d6efd;
+    --header-text: #ffffff;
+    --border-color: #ccc;
+    --body-bg: #f9f9f9;
+    --footer-bg: #f1f1f1;
+    --user-msg: #d1e7dd;
+    --ai-msg: #e2e3e5;
+}
+
+/* DARK THEME */
+body.dark-theme {
+    --bg-color: #121212;
+    --text-color: #ffffff;
+    --header-bg: #1f1f1f;
+    --header-text: #ffffff;
+    --border-color: #333;
+    --body-bg: #1e1e1e;
+    --footer-bg: #2a2a2a;
+    --user-msg: #387d7a;
+    --ai-msg: #3a3b3c;
 }

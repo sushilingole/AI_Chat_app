@@ -6,11 +6,9 @@ async function sendMessage(event) {
     const message = input.value.trim();
     if (!message) return;
 
-    // Append the user's message
     appendMessage('You', message, 'user-message');
     input.value = '';
 
-    // ⏳ Show loader while waiting for the AI response
     const loader = document.createElement('div');
     loader.classList.add('message', 'loader-message');
     loader.setAttribute('id', 'loader');
@@ -28,11 +26,9 @@ async function sendMessage(event) {
 
         const result = await response.text();
 
-        // ❌ Remove loader before displaying response
         const loaderElement = document.getElementById('loader');
         if (loaderElement) loaderElement.remove();
 
-        // ✅ Append formatted AI message
         appendMessage('AI', formatResponse(result), 'ai-message', true);
     } catch (error) {
         console.error('Error:', error);
@@ -51,14 +47,12 @@ function appendMessage(sender, text, className, isHTML = false) {
     chatBody.scrollTop = chatBody.scrollHeight;
 
     if (isHTML && sender === 'AI') {
-        // Typewriter effect for AI
         typeHTML(div, `<strong>${sender}:</strong><br>${text}`, () => {
             if (typeof Prism !== 'undefined') {
                 Prism.highlightAll();
             }
         });
     } else {
-        // Default message
         if (isHTML) {
             div.innerHTML = `<strong>${sender}:</strong><br>${text}`;
         } else {
@@ -70,40 +64,30 @@ function appendMessage(sender, text, className, isHTML = false) {
     }
 }
 
-
-// 🎨 Formats raw AI response into rich HTML: code, bold, line breaks
+// 🎨 Formats raw AI response into rich HTML
 function formatResponse(text) {
-    // Escape raw HTML
     text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-    // Replace multiline code block: ```lang\ncode\n```
-	const codeBlocks = [];
-	   text = text.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
-	       const language = lang || 'javascript';
-	       const id = codeBlocks.length;
-	       codeBlocks.push({ language, code });
-	       return `[[CODE_BLOCK_${id}]]`; // Temporary placeholder
-	   });
+    const codeBlocks = [];
+    text = text.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+        const language = lang || 'javascript';
+        const id = codeBlocks.length;
+        codeBlocks.push({ language, code });
+        return `[[CODE_BLOCK_${id}]]`;
+    });
 
-    // Inline code: `code`
     text = text.replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>');
-
-    // Bold: **text**
     text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-    // Line breaks
     text = text.replace(/\n/g, '<br>');
 
-	// Restore code blocks
-	    codeBlocks.forEach((block, i) => {
-	        const codeHtml = `<pre class="code-editor"><code class="language-${block.language}">${block.code}</code></pre>`;
-	        text = text.replace(`[[CODE_BLOCK_${i}]]`, codeHtml);
-	    });
+    codeBlocks.forEach((block, i) => {
+        const codeHtml = `<pre class="code-editor"><code class="language-${block.language}">${block.code}</code></pre>`;
+        text = text.replace(`[[CODE_BLOCK_${i}]]`, codeHtml);
+    });
     return text;
 }
 
-
-//typing style representation of Responce :
+// ✨ Typing animation for AI response
 function typeHTML(container, html, callback) {
     let index = 0;
     let temp = '';
@@ -113,7 +97,6 @@ function typeHTML(container, html, callback) {
         const currentChar = html[index];
         temp += currentChar;
 
-        // Handle HTML tags quickly (no delay inside tags)
         if (currentChar === '<') isTag = true;
         if (currentChar === '>') isTag = false;
 
@@ -122,7 +105,7 @@ function typeHTML(container, html, callback) {
 
         index++;
         if (index < html.length) {
-            setTimeout(typeChar, isTag ? 0 : 4); // Faster inside tags, slower outside
+            setTimeout(typeChar, isTag ? 0 : 4);
         } else if (callback) {
             callback();
         }
@@ -131,3 +114,31 @@ function typeHTML(container, html, callback) {
     typeChar();
 }
 
+// 🌗 Theme Toggle Handler
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('themeToggle');
+    const body = document.body;
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            body.classList.toggle('dark-theme');
+            body.classList.toggle('light-theme');
+
+            if (body.classList.contains('dark-theme')) {
+                toggleBtn.textContent = 'Switch to Light';
+                toggleBtn.classList.remove('btn-outline-light');
+                toggleBtn.classList.add('btn-outline-warning');
+            } else {
+                toggleBtn.textContent = 'Switch to Dark';
+                toggleBtn.classList.remove('btn-outline-warning');
+                toggleBtn.classList.add('btn-outline-light');
+            }
+        });
+    }
+
+    // Chat form submission listener
+    const chatForm = document.getElementById('chatForm');
+    if (chatForm) {
+        chatForm.addEventListener('submit', sendMessage);
+    }
+});
